@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -27,16 +28,34 @@ class _PostDetailPageState extends State<PostDetailPage> {
         margin: EdgeInsets.all(10),
         child: ListView(
           children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  child: Text(
-                    widget.snapshot.data()['title'][0],
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    child: Text(
+                      widget.snapshot.data()['title'][0],
+                    ),
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
                   ),
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                )
-              ],
+                  SizedBox(width: 10,),
+                  Text(widget.snapshot.data()['title'],
+                  style: TextStyle(
+                    fontSize: 22.0,color: Colors.black
+                  ),)
+                ],
+              ),
+            ),
+            SizedBox(height: 10,),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Text(
+                widget.snapshot.data()['content'],
+                style: TextStyle(
+                  fontSize: 18
+                ),
+              ),
             )
           ],
         ),
