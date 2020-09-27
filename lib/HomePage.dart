@@ -1,4 +1,9 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:async/async.dart';
+
 import 'package:flutter/material.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -6,6 +11,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  StreamSubscription<QuerySnapshot> subscription;
+
+  List<DocumentSnapshot> snapshot;
+
+  CollectionReference collectionReference = Firestore.instance.collection("Post");
+
+  @override
+  void initState() {
+    super.initState();
+    
+    subscription = collectionReference.snapshots().listen((dataSnapshot) {
+      setState(() {
+        snapshot = dataSnapshot.documents;
+      });
+
+    });
+    
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +99,29 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      body: ListView.builder(itemBuilder: (context, index){
+        return Card(
+          elevation: 10,
+          margin: EdgeInsets.all(10.0),
+          child: Container(
+            child: Row(
+              children: [
+                CircleAvatar(
+                  child: Text(snapshot[index].data()["title"][0]),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      Text(snapshot[index].data()['title']),
+                      Text(snapshot[index].data()['content'])
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },itemCount: snapshot.length,),
     );
   }
 }
